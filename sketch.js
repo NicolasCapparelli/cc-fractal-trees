@@ -20,29 +20,38 @@ let sketch = function (context) {
 
 function drawBranch(ctx, branchHeight) {
     ctx.line(0, 0, 0, -branchHeight);
-    ctx.push();
+
     ctx.translate(0, -branchHeight);
-    ctx.rotate(ctx.branchingAngle);
     if (branchHeight > 4) {
+        ctx.push();
+        ctx.rotate(ctx.branchingAngle);
         drawBranch(ctx, branchHeight * 0.67);
+        ctx.pop();
     }
-    ctx.pop();
+
+    ctx.push();
     ctx.rotate(-ctx.branchingAngle);
     if (branchHeight > 4) {
         drawBranch(ctx, branchHeight * 0.67);
     }
+    ctx.pop();
 
 }
 
+let sketchContainer = document.getElementById("sketch-name");
+let fractalTreeSketch = new p5(sketch, sketchContainer);
+
+// Value Sliders
 let branchingAngleSlider = document.getElementById("branching-angle-slider");
 branchingAngleSlider.setAttribute("min", (0).toString());
-branchingAngleSlider.setAttribute("max", (p5.PI / 2).toString());
+branchingAngleSlider.setAttribute("max", (p5.PI * 2).toString());
 branchingAngleSlider.setAttribute("step", "0.01");
 branchingAngleSlider.oninput = function (newValue) {
     fractalTreeSketch.branchingAngle = branchingAngleSlider.value;
 }
 
-
 let startingBranchLengthSlider = document.getElementById("starting-branch-length-slider");
-let sketchContainer = document.getElementById("sketch-name");
-let fractalTreeSketch = new p5(sketch, sketchContainer);
+startingBranchLengthSlider.oninput = function () {
+    fractalTreeSketch.startingBranchLength = startingBranchLengthSlider.value;
+}
+
